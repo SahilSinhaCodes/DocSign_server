@@ -18,3 +18,13 @@ export const uploadDocument = async (req, res) => {
     res.status(500).json({ message: 'Upload failed', error: err.message });
   }
 };
+
+export const getMyDocuments = async (req, res) => {
+  try {
+    const docs = await Document.find({ uploadedBy: req.user.id }).sort({ createdAt: -1 });
+    res.status(200).json(docs);
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to fetch documents' });
+  }
+};
+
