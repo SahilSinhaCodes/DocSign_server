@@ -1,4 +1,6 @@
 import Document from '../models/Document.js';
+import fs from 'fs';
+import path from 'path';
 
 export const uploadDocument = async (req, res) => {
   try {
@@ -28,3 +30,26 @@ export const getMyDocuments = async (req, res) => {
   }
 };
 
+
+export const deleteDocument = async (req, res) => {
+  try {
+    const doc = await Document.findOne({
+      _id: req.params.id,
+      uploadedBy: req.user.id,
+    });
+
+    if (!doc) return res.status(404).json({ message: 'Document not found' });
+
+    // Remove file from filesystem
+    fs.unlink(path.resolve(doc.path), (err) => {
+      if (err) console.error('Error deleting file:', err);
+    });
+
+    // Delete from database
+    await doc.deleteOne();
+
+    res.status(200).json({ message: 'Document deleted successfully' });
+  } catch (err) {
+    res.status(500).json({ message: 'Failed to delete document', error: err.message });
+  }
+};
