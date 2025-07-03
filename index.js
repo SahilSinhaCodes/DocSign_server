@@ -21,6 +21,7 @@ app.use('/uploads', (req, res, next) => {
   next();
 }, express.static(path.join(__dirname, 'uploads')));
 
+app.use('/signed', express.static(path.join(__dirname, 'signed')));
 // General Middleware
 app.use(cors());
 app.use(express.json());
