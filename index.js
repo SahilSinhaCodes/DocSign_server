@@ -29,7 +29,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.get('/', (req, res) => {
-  res.send('DocuSign Clone API is running...');
+  res.send('DocSign Clone API is running...');
 });
 
 app.use('/api/auth', authRoutes);
